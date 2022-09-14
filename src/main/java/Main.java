@@ -6,13 +6,14 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String parentPath = "src/main/resources/dictionaries/";
+        String parentPath = "src/main/resources/";
         String level = "elementary/";
         String chapter = "chapter4/";
-        parentPath += level + chapter;
+        String path = parentPath + "dictionaries/" + level + chapter;
+        String pathForResultTest = parentPath + "result/" + level + chapter;
 
         WordReader wordReader = new WordReaderImpl();
-        List<Word> wordList = wordReader.readWordsFromFile(parentPath + "C");
+        List<Word> wordList = wordReader.readWordsFromFile(path + "C");
 
         WordManager wordManager = new WordManagerImpl();
         wordManager.addWordsToDictionary(wordList);
@@ -34,6 +35,6 @@ public class Main {
                 printer.showWrongMessage(word);
             }
         }
-        wordManager.saveStatisticToFile("src/main/resources/result/A");
+        wordManager.saveStatisticToFile(pathForResultTest + "A");
     }
 }
