@@ -2,10 +2,8 @@ package service;
 
 import entity.Word;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -14,21 +12,26 @@ public class WordManagerImpl implements WordManager {
     private long current_id;
     private final Map<Long, Word> dictionary;
     private final List<Long> randomIdSupplierList;
+    private final Map<Integer, List<Word>> statistic;
+    private final StatisticWriter statisticWriter;
 
     public WordManagerImpl() {
         this.dictionary = new HashMap<>();
         randomIdSupplierList = new ArrayList<>();
         current_id = 0;
+        statisticWriter = new StatisticWriterImpl();
+        statistic = new TreeMap<>(Comparator.reverseOrder());
     }
 
     @Override
     public void addWordsToDictionary(List<Word> wordList) {
-        wordList.forEach((word) -> {
-            long id = ++current_id;
-            word.setId(id);
-            dictionary.put(id, word);
-        });
+        wordList.forEach(this::addOneWordToDictionary);
         fillRandomIdSupplierList();
+    }
+    private void addOneWordToDictionary(Word word){
+        long id = ++current_id;
+        word.setId(id);
+        dictionary.put(id, word);
     }
 
     @Override
@@ -63,34 +66,34 @@ public class WordManagerImpl implements WordManager {
     }
 
     @Override
-    public void saveStatisticToFile(String path) {
-        File file = new File(path);
-        file.getParentFile().mkdirs();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            Map<Integer, List<Word>> statistic = new TreeMap<>(Comparator.reverseOrder());
-            for (Word word : dictionary.values()) {
-                int key = word.getMaxWrongCount();
-                List<Word> words = statistic.getOrDefault(key, new ArrayList<>());
-                words.add(word);
-                statistic.put(key, words);
-            }
-            for (Integer key : statistic.keySet()) {
-                List<Word> words = statistic.get(key);
-                for (Word word : words) {
-                    writer.write(word.getMaxWrongCount()
-                            + word.getValue()
-                            + "=" + word.getTranslate()
-                            + "=" + word.getTranscription()
-                            + "\n");
-                }
+    public void saveStatistic(String pathName) {
+        Path path = createValidPath(pathName);
+        fillStatisticMap();
+        statisticWriter.writeStatisticToFile(statistic, path);
+    }
+
+    private void fillStatisticMap() {
+        for (Word word : dictionary.values()) {
+            int key = word.getMaxWrongCount();
+            List<Word> words = statistic.getOrDefault(key, new ArrayList<>());
+            words.add(word);
+            statistic.put(key, words);
+        }
+    }
+
+    private Path createValidPath(String pathName) {
+        Path path = Path.of(pathName);
+        try {
+            if (Files.notExists(path)) {
+                Files.createDirectories(path.getParent());
+                Files.createFile(path);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return path;
     }
+
     private void fillRandomIdSupplierList() {
         randomIdSupplierList.addAll(dictionary.keySet());
     }

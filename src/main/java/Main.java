@@ -9,11 +9,12 @@ public class Main {
         String parentPath = "src/main/resources/";
         String level = "elementary/";
         String chapter = "chapter4/";
+        String fileName = "D";
         String path = parentPath + "dictionaries/" + level + chapter;
         String pathForResultTest = parentPath + "result/" + level + chapter;
 
         WordReader wordReader = new WordReaderImpl();
-        List<Word> wordList = wordReader.readWordsFromFile(path + "C");
+        List<Word> wordList = wordReader.readWordsFromFile(path + fileName);
 
         WordManager wordManager = new WordManagerImpl();
         wordManager.addWordsToDictionary(wordList);
@@ -35,6 +36,6 @@ public class Main {
                 printer.showWrongMessage(word);
             }
         }
-        wordManager.saveStatisticToFile(pathForResultTest + "A");
+        wordManager.saveStatistic(pathForResultTest + fileName);
     }
 }

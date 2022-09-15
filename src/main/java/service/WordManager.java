@@ -3,7 +3,6 @@ package service;
 import entity.Word;
 
 import java.util.List;
-import java.util.Map;
 
 public interface WordManager {
     void addWordsToDictionary(List<Word> wordList);
@@ -18,5 +17,5 @@ public interface WordManager {
 
     int wordsLeft();
 
-    void saveStatisticToFile(String path);
+    void saveStatistic(String path);
 }
