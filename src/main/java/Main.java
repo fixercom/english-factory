@@ -19,13 +19,12 @@ public class Main {
         String pathForResultTest = parentPath + "result/" + level + chapter;
 
         WordReader wordReader = new WordReaderImpl();
-        List<Word> wordList = wordReader.readWordsFromFile(path + fileName);
-
         WordManager wordManager = new WordManagerImpl();
-        wordManager.addWordsToDictionary(wordList);
-
         Printer printer = new PrinterImpl(wordManager);
         Scanner scanner = new Scanner(System.in);
+
+        List<Word> words = wordReader.readWordsFromFile(path + fileName);
+        wordManager.addWordsToDictionary(words);
 
         while (wordManager.hasNextWord()) {
             Word word = wordManager.getNextWord();
