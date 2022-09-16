@@ -2,12 +2,7 @@ package service.manager;
 
 import entity.Statistic;
 import entity.Word;
-import service.writer.StatisticWriter;
-import service.writer.StatisticWriterImpl;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 public class WordManagerImpl implements WordManager {
@@ -16,13 +11,11 @@ public class WordManagerImpl implements WordManager {
     private final Map<Long, Word> dictionary;
     private final List<Long> randomIdSupplierList;
     private final Statistic statistic;
-    private final StatisticWriter statisticWriter;
 
     public WordManagerImpl() {
         this.dictionary = new HashMap<>();
         randomIdSupplierList = new ArrayList<>();
         current_id = 0;
-        statisticWriter = new StatisticWriterImpl();
         statistic = new Statistic();
     }
 
@@ -70,28 +63,18 @@ public class WordManagerImpl implements WordManager {
     }
 
     @Override
-    public void saveStatistic(String pathName) {
+    public void saveStatistic() {
         statistic.addWordsFromDictionary(dictionary.values());
-        Path path = createValidPath(pathName);
-        statisticWriter.writeStatisticToFile(statistic.getStatistic(), path);
+    }
+
+    @Override
+    public List<String> getStatistic() {
+        return statistic.getStatisticList();
     }
 
     @Override
     public boolean isTrueAnswer(String answer, Word word) {
         return answer.equals(word.getValue());
-    }
-
-    private Path createValidPath(String pathName) {
-        Path path = Path.of(pathName);
-        try {
-            if (Files.notExists(path)) {
-                Files.createDirectories(path.getParent());
-                Files.createFile(path);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return path;
     }
 
     private void fillRandomIdSupplierList() {

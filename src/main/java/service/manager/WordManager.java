@@ -3,6 +3,7 @@ package service.manager;
 import entity.Word;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface WordManager {
     void addWordsToDictionary(List<Word> wordList);
@@ -17,7 +18,9 @@ public interface WordManager {
 
     int wordsLeft();
 
-    void saveStatistic(String path);
+    void saveStatistic();
+
+    List<String> getStatistic();
 
     boolean isTrueAnswer(String answer, Word word);
 }
