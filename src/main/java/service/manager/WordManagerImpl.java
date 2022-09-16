@@ -1,6 +1,8 @@
-package service;
+package service.manager;
 
 import entity.Word;
+import service.writer.StatisticWriter;
+import service.writer.StatisticWriterImpl;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package service;
+package service.reader;
 
 import entity.Word;
 

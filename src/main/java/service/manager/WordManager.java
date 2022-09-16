@@ -1,4 +1,4 @@
-package service;
+package service.manager;
 
 import entity.Word;
 

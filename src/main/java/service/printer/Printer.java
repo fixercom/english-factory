@@ -1,4 +1,4 @@
-package service;
+package service.printer;
 
 import entity.Word;
 

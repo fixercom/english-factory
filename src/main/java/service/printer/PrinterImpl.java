@@ -1,8 +1,9 @@
-package service;
+package service.printer;
 
 import entity.Word;
+import service.manager.WordManager;
 
-public class PrinterImpl implements Printer{
+public class PrinterImpl implements Printer {
     private final WordManager wordManager;
 
     public PrinterImpl(WordManager wordManager) {

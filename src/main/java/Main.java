@@ -1,5 +1,10 @@
 import entity.Word;
-import service.*;
+import service.manager.WordManager;
+import service.manager.WordManagerImpl;
+import service.printer.Printer;
+import service.printer.PrinterImpl;
+import service.reader.WordReader;
+import service.reader.WordReaderImpl;
 
 import java.util.List;
 import java.util.Scanner;
