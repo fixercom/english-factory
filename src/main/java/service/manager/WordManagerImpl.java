@@ -1,5 +1,6 @@
 package service.manager;
 
+import entity.Statistic;
 import entity.Word;
 import service.writer.StatisticWriter;
 import service.writer.StatisticWriterImpl;
@@ -14,7 +15,7 @@ public class WordManagerImpl implements WordManager {
     private long current_id;
     private final Map<Long, Word> dictionary;
     private final List<Long> randomIdSupplierList;
-    private final Map<Integer, List<Word>> statistic;
+    private final Statistic statistic;
     private final StatisticWriter statisticWriter;
 
     public WordManagerImpl() {
@@ -22,7 +23,7 @@ public class WordManagerImpl implements WordManager {
         randomIdSupplierList = new ArrayList<>();
         current_id = 0;
         statisticWriter = new StatisticWriterImpl();
-        statistic = new TreeMap<>(Comparator.reverseOrder());
+        statistic = new Statistic();
     }
 
     @Override
@@ -30,7 +31,8 @@ public class WordManagerImpl implements WordManager {
         wordList.forEach(this::addOneWordToDictionary);
         fillRandomIdSupplierList();
     }
-    private void addOneWordToDictionary(Word word){
+
+    private void addOneWordToDictionary(Word word) {
         long id = ++current_id;
         word.setId(id);
         dictionary.put(id, word);
@@ -69,23 +71,14 @@ public class WordManagerImpl implements WordManager {
 
     @Override
     public void saveStatistic(String pathName) {
+        statistic.addWordsFromDictionary(dictionary.values());
         Path path = createValidPath(pathName);
-        fillStatisticMap();
-        statisticWriter.writeStatisticToFile(statistic, path);
+        statisticWriter.writeStatisticToFile(statistic.getStatistic(), path);
     }
 
     @Override
     public boolean isTrueAnswer(String answer, Word word) {
         return answer.equals(word.getValue());
-    }
-
-    private void fillStatisticMap() {
-        for (Word word : dictionary.values()) {
-            int key = word.getMaxWrongCount();
-            List<Word> words = statistic.getOrDefault(key, new ArrayList<>());
-            words.add(word);
-            statistic.put(key, words);
-        }
     }
 
     private Path createValidPath(String pathName) {
