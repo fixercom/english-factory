@@ -18,12 +18,16 @@ public class WordReaderImpl implements WordReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return Arrays.stream(content.split("\n")).map((line) -> {
-            String[] elements = line.split("=");
-            String value = elements[0];
-            String translate = elements[1];
-            String transcription = elements[2];
-            return new Word(value, translate, transcription);
-        }).collect(Collectors.toList());
+        return Arrays.stream(content.split("\n"))
+                .map(this::parseWordFromLineOfFile)
+                .collect(Collectors.toList());
+    }
+
+    private Word parseWordFromLineOfFile(String lineOfFile) {
+        String[] elements = lineOfFile.split("=");
+        String value = elements[0];
+        String translate = elements[1];
+        String transcription = elements[2];
+        return new Word(value, translate, transcription);
     }
 }
