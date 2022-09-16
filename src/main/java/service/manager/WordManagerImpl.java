@@ -74,6 +74,11 @@ public class WordManagerImpl implements WordManager {
         statisticWriter.writeStatisticToFile(statistic, path);
     }
 
+    @Override
+    public boolean isTrueAnswer(String answer, Word word) {
+        return answer.equals(word.getValue());
+    }
+
     private void fillStatisticMap() {
         for (Word word : dictionary.values()) {
             int key = word.getMaxWrongCount();

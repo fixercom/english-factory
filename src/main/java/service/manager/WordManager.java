@@ -18,4 +18,6 @@ public interface WordManager {
     int wordsLeft();
 
     void saveStatistic(String path);
+
+    boolean isTrueAnswer(String answer, Word word);
 }

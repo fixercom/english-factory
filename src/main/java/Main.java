@@ -32,7 +32,7 @@ public class Main {
             printer.showQuantityOfWordsLeft();
             printer.showRussianWord(word);
             String answer = scanner.nextLine();
-            if (answer.equalsIgnoreCase(word.getValue())) {
+            if (wordManager.isTrueAnswer(answer,word)) {
                 wordManager.markWordAsRight(word);
                 printer.showTranscription(word);
             } else {
