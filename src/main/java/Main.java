@@ -11,17 +11,20 @@ import service.writer.StatisticWriterImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String parentPath = "src/main/resources/";
-        String level = "elementary/";
-        String chapter = "chapter4/";
-        String fileName = "D";
-        String path = parentPath + "dictionaries/" + level + chapter;
-        String pathForResultTest = parentPath + "result/" + level + chapter;
+        String parentPath = "src/main/resources/dictionaries/";
+        String pathForResultTest = "src/main/resources/result/chapter3a";
+
+        List<String> paths = new ArrayList<>();
+        /*paths.add(parentPath + "elementary/chapter4/A");
+        paths.add(parentPath + "elementary/chapter4/B");
+        paths.add(parentPath + "elementary/chapter4/C");*/
+        paths.add(parentPath + "elementary/chapter3/A");
 
         WordReader wordReader = new WordReaderImpl();
         StatisticWriter statisticWriter = new StatisticWriterImpl();
@@ -29,7 +32,7 @@ public class Main {
         Printer printer = new PrinterImpl(wordManager);
         Scanner scanner = new Scanner(System.in);
 
-        List<Word> words = wordReader.readWordsFromFile(path + fileName);
+        List<Word> words = wordReader.readWordsFromFiles(paths);
         wordManager.addWordsToDictionary(words);
 
         while (wordManager.hasNextWord()) {
@@ -46,7 +49,7 @@ public class Main {
                 printer.showWrongMessage(word);
             }
         }
-        Path pathForStatistic = createValidPath(pathForResultTest + fileName);
+        Path pathForStatistic = createValidPath(pathForResultTest);
         wordManager.saveStatistic();
         statisticWriter.write(wordManager.getStatistic(), pathForStatistic);
     }

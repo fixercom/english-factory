@@ -74,7 +74,7 @@ public class WordManagerImpl implements WordManager {
 
     @Override
     public boolean isTrueAnswer(String answer, Word word) {
-        return answer.equals(word.getValue());
+        return answer.equalsIgnoreCase(word.getValue());
     }
 
     private void fillRandomIdSupplierList() {
